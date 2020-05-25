@@ -3,7 +3,6 @@
 
 #include "base.h"
 
-#define GRF_GPIO4C_IOMUX	(GRF_BASE + 0x0E028)
 #define PMUGRF_GPIO0B_IOMUX	(PMUGRF_BASE + 0x0004)
 #define GPIO0B4_SHIFT		8
 #define FUNC_MASK		0x03
