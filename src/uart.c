@@ -59,3 +59,8 @@ void uart_init ( void )
 	put32(UART2_MCR, UART_MCRVAL);
 }
 
+// This function is required by printf function
+void putc ( void* p, char c)
+{
+	uart_send(c);
+}
