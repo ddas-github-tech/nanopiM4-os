@@ -1,4 +1,5 @@
 #include "mm.h"
+#include "arm/sysregs.h"
 
 .section ".text.boot"
 
@@ -6,16 +7,28 @@
 
 _start:
 //    bl      	led_on
-    adr		x0, bss_begin
-    adr    	x1, bss_end
-    sub    	x1, x1, x0
-    bl     	memzero
-    ldr    	x0, =(STACK_PTR)
-    and    	sp, x0, #0xfffffffffffffff0
-    bl    	kernel_main
+	bl	el2_setup
+el1_entry:
+	adr	x0, bss_begin
+	adr    	x1, bss_end
+	sub    	x1, x1, x0
+	bl     	memzero
+	ldr    	x0, =(STACK_PTR)
+	and    	sp, x0, #0xfffffffffffffff0
+	bl    	kernel_main
 hang:
     b		hang
     
+el2_setup:
+	ldr     x0, =(SCTLR_VALUE_MMU_DISABLED) // disbale MMU, CACHES for EL1        
+	msr     sctlr_el1, x0
+	ldr     x0, =(HCR_VALUE) // configure 64bit EL1
+	msr     hcr_el2, x0
+	ldr     x0, =(SPSR_VALUE) // prepare SPSR to return to EL1
+	msr     spsr_el2, x0
+	msr     elr_el2, lr // jump to lr in EL1
+	eret
+
 led_on:
     mov     	x0, #0x4                        // #4
     movk    	x0, #0xff32, lsl #16
