@@ -1,3 +1,4 @@
+
 .globl put32
 put32:
 	dmb sy
@@ -10,3 +11,8 @@ get32:
 	dmb sy
 	ret
 
+.global get_el
+get_el:
+	mrs x0, currentEL
+	lsr x0, x0, #2
+	ret
