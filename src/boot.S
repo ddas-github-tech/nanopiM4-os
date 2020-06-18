@@ -20,6 +20,11 @@ hang:
     b		hang
     
 el2_setup:
+	mrs	x0, ICC_SRE_EL2
+	ldr	x10, =ICC_SRE_EL2_VAL    // Set ICC_SRE_EL2.SRE & Enable ==1
+	orr	x0, x0, x10    // Set ICC_SRE_EL2.SRE & Enable ==1
+	msr	S3_4_C12_C9_5, x0
+	isb                    // Make sure SRE is now set
 	ldr     x0, =(SCTLR_VALUE_MMU_DISABLED) // disbale MMU, CACHES for EL1        
 	msr     sctlr_el1, x0
 	ldr     x0, =(HCR_VALUE) // configure 64bit EL1
