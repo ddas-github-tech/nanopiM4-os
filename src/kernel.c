@@ -19,7 +19,8 @@ void kernel_main(void)
 	printf("Exception level: %d \r\n", el);
 	irq_vector_init();
 	gic_init();
-	test_irq();
+	//test_irq();
+	timer_init();
 	unmask_irq();
 
 	while (1) {
