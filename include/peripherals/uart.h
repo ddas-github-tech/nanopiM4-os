@@ -67,4 +67,12 @@
 #define UART2_1_5_MBPS_DIVISOR	0x0001	/* divisor for 1.5mbps with 2.4Mhz clk */
 #define UART_LCRVAL UART_LCR_8N1                /* 8 data, 1 stop, no parity */
 
+#define UART2C_MASK		15
+#define UART2C_SHIFT 		6
+#define UART2C_ENABLE_SHIFT	(16 + UART2C_SHIFT)
+#define UART2C_VAL		5
+#define UART_CHAN_MASK		3
+#define UART_CHAN_SHIFT		10
+#define UART2C_CHAN		2
+
 #endif  /*_P_UART_H */
