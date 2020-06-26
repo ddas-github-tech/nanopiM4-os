@@ -35,18 +35,19 @@ void uart_init ( void )
 	unsigned int selector;
 
 	/* set IOMUX as UART2C */
+
 	selector = get32(GRF_GPIO4C_IOMUX);
-	selector &= ~(15<<6);                   // clean [9:6]
-	selector |= 5<<6;                      // set 4b'0101 select UART2C IN/OUT
-	// put32(GRF_GPIO4C_IOMUX,selector);
-	put32(GRF_GPIO4C_IOMUX,0x03c00140);
+	selector &= ~(UART2C_MASK << UART2C_SHIFT);
+	selector |= UART2C_MASK << UART2C_ENABLE_SHIFT;
+	selector |= UART2C_VAL << UART2C_SHIFT;
+	put32(GRF_GPIO4C_IOMUX, selector);
 
 
 	/* Set channel C as UART2 input */
 	selector = get32(GRF_SOC_CON7);
-	selector &= ~(3 << 10);
-	selector |= 2 << 10;
-	put32(GRF_SOC_CON7,selector);
+	selector &= ~(UART_CHAN_MASK << UART_CHAN_SHIFT);
+	selector |= UART2C_CHAN << UART_CHAN_SHIFT;
+	put32(GRF_SOC_CON7, selector);
 
 
 	put32(UART2_IER, DISABLE_INTR);
