@@ -50,7 +50,6 @@ void uart_init ( void )
 
 
 	put32(UART2_IER, DISABLE_INTR);
-	put32(UART2_MCR, UART_MCRVAL);
 	put32(UART2_FCR, UART_FCR_DEFVAL);
         put32(UART2_LCR, UART_LCR_BKSE | UART_LCRVAL);
         put32(UART2_DLL, UART2_1_5_MBPS_DIVISOR & 0xff);
