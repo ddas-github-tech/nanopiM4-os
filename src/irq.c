@@ -46,8 +46,8 @@ void handle_irq(void)
 		call_handler[irq - SPI_OFFSET](handler_args[irq - SPI_OFFSET]);
 	else
 		printf("Unknown pending irq: \r\n");
+	//deactivate_interrupt(irq);
 
-	deactivate_interrupt(irq);
 }
 
 void request_irq( unsigned int irq_no, irq_type_t type, void (* irq_handler)( void* ), void* args )

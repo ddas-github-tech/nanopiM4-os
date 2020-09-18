@@ -2,6 +2,7 @@
 #include "printf.h"
 #include "irq.h"
 
+unsigned long jiffies = 0;
 timer_registers* timer_reg;
 
 static inline void disable_timer( timer_registers* timer_reg )
@@ -48,10 +49,12 @@ static inline void clear_interrupt( timer_registers* timer_reg )
 
 void timer_handler( void* irq_data )
 {
+	jiffies++;
 	timer_registers* timer_reg = (timer_registers*) irq_data;
-
-	printf("timer interrupt handler called\r\n");
 	clear_interrupt(timer_reg);
+	deactivate_interrupt(TIMER0_IRQ);
+	timer_tick();
+	//printf("timer interrupt handler called\r\n");
 	
 }
 
@@ -62,8 +65,9 @@ void timer_init( void )
 	disable_timer(timer_reg);
 	clear_interrupt(timer_reg);
 	mask_interrupt(timer_reg);
-	set_timer_mode(timer_reg, USER_DEFINED_MODE);
-	load_timer_value(timer_reg, (5 * SECONDS));
+	set_timer_mode(timer_reg, FREE_RUNNING_MODE);
+	//load_timer_value(timer_reg, (SECONDS/HZ));
+	load_timer_value(timer_reg, (SECONDS));
 	request_irq(TIMER0_IRQ, IRQ_TYPE_LEVEL, timer_handler, (void*)timer_reg);
 	unmask_interrupt(timer_reg);
 	enable_timer(timer_reg);
